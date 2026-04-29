@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Générateur AGENTS.md</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --bg-soft: #1e293b;
+    --bg-card: #1a2236;
+    --border: #2a3650;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --accent: #6366f1;
+    --accent-hover: #4f46e5;
+    --accent-soft: #312e81;
+    --success: #10b981;
+    --danger: #ef4444;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  .app {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  header.hero {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  header.hero h1 {
+    font-size: 2.2rem;
+    margin: 0 0 8px;
+    background: linear-gradient(90deg, #818cf8, #c084fc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  header.hero p {
+    color: var(--text-muted);
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .progress-step {
+    flex: 1;
+    min-width: 60px;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    transition: background 0.3s ease;
+  }
+
+  .progress-step.active {
+    background: var(--accent);
+  }
+
+  .progress-step.done {
+    background: var(--success);
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+
+  .step-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .step-counter {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .step-title {
+    font-size: 1.6rem;
+    margin: 4px 0 8px;
+    font-weight: 700;
+  }
+
+  .step-desc {
+    color: var(--text-muted);
+    margin: 0 0 28px;
+  }
+
+  .field {
+    margin-bottom: 20px;
+  }
+
+  .field label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .field .help {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  input[type="text"],
+  input[type="url"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 11px 14px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  input[type="text"]:focus,
+  input[type="url"]:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  }
+
+  textarea {
+    min-height: 90px;
+    resize: vertical;
+    font-family: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+    font-size: 0.88rem;
+  }
+
+  .checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 8px;
+  }
+
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.92rem;
+  }
+
+  .checkbox-item:hover {
+    border-color: var(--accent);
+  }
+
+  .checkbox-item input {
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  .checkbox-item.checked {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+  }
+
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    padding: 11px 22px;
+    border-radius: 8px;
+    border: none;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover {
+    background: var(--bg-soft);
+  }
+
+  .btn-success {
+    background: var(--success);
+    color: white;
+  }
+
+  .btn-success:hover {
+    background: #059669;
+    transform: translateY(-1px);
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  .preview {
+    background: #0a0f1e;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    max-height: 480px;
+    overflow: auto;
+    font-family: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #cbd5e1;
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .summary-item {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+
+  .summary-item .label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+  }
+
+  .summary-item .value {
+    font-weight: 500;
+    word-break: break-word;
+  }
+
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .pill {
+    background: var(--accent-soft);
+    color: #c7d2fe;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+  }
+
+  .welcome-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin: 24px 0 8px;
+  }
+
+  .feature {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .feature .icon {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+  }
+
+  .feature h3 {
+    margin: 0 0 4px;
+    font-size: 1rem;
+  }
+
+  .feature p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .download-result {
+    text-align: center;
+    padding: 24px 0;
+  }
+
+  .download-result .check {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--success);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 16px;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 32px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  @media (max-width: 600px) {
+    .card { padding: 22px 18px; }
+    header.hero h1 { font-size: 1.6rem; }
+    .step-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <h1>Générateur AGENTS.md</h1>
+      <p>Créez un fichier de configuration pour vos agents IA en quelques étapes</p>
+    </header>
+
+    <div class="progress" id="progress"></div>
+
+    <div class="card" id="card">
+      <!-- Le contenu de l'étape est injecté ici -->
+    </div>
+
+    <footer>
+      Le fichier <code>AGENTS.md</code> est un standard pour guider les agents IA (Claude Code, Cursor, Copilot, etc.).
+    </footer>
+  </div>
+
+<script>
+"use strict";
+
+const state = {
+  currentStep: 0,
+  data: {
+    projectName: "",
+    description: "",
+    projectType: "",
+    repoUrl: "",
+    languages: [],
+    frameworks: [],
+    packageManager: "",
+    installCmd: "",
+    devCmd: "",
+    buildCmd: "",
+    testCmd: "",
+    lintCmd: "",
+    formatCmd: "",
+    codeStyle: "",
+    namingConv: "",
+    commentStyle: "",
+    folderStructure: "",
+    conventions: "",
+    doRules: "",
+    dontRules: "",
+    extraNotes: ""
+  }
+};
+
+const LANGUAGES = ["JavaScript", "TypeScript", "Python", "Go", "Rust", "Java", "Kotlin", "Swift", "C", "C++", "C#", "Ruby", "PHP", "Shell", "HTML/CSS"];
+const FRAMEWORKS = ["React", "Next.js", "Vue", "Svelte", "Angular", "Node.js", "Express", "FastAPI", "Django", "Flask", "Spring", "Rails", ".NET", "SwiftUI", "Flutter", "Tauri"];
+const PACKAGE_MANAGERS = ["", "npm", "pnpm", "yarn", "bun", "pip", "poetry", "uv", "cargo", "go modules", "maven", "gradle", "composer", "bundler"];
+
+const steps = [
+  {
+    id: "welcome",
+    title: "Bienvenue",
+    counter: "Démarrage",
+    desc: "Cet assistant vous guide pour créer un fichier AGENTS.md adapté à votre projet.",
+    render: renderWelcome,
+    validate: () => true
+  },
+  {
+    id: "project",
+    title: "Votre projet",
+    counter: "Étape 1 / 6",
+    desc: "Donnez les informations générales sur le projet.",
+    render: renderProject,
+    validate: () => state.data.projectName.trim().length > 0
+  },
+  {
+    id: "stack",
+    title: "Stack technique",
+    counter: "Étape 2 / 6",
+    desc: "Sélectionnez les langages et frameworks utilisés.",
+    render: renderStack,
+    validate: () => true
+  },
+  {
+    id: "commands",
+    title: "Commandes",
+    counter: "Étape 3 / 6",
+    desc: "Indiquez les commandes courantes du projet (install, build, test…).",
+    render: renderCommands,
+    validate: () => true
+  },
+  {
+    id: "style",
+    title: "Style de code",
+    counter: "Étape 4 / 6",
+    desc: "Précisez les conventions de style et nommage.",
+    render: renderStyle,
+    validate: () => true
+  },
+  {
+    id: "rules",
+    title: "Règles pour l'agent",
+    counter: "Étape 5 / 6",
+    desc: "Indiquez ce que l'agent doit faire et éviter.",
+    render: renderRules,
+    validate: () => true
+  },
+  {
+    id: "preview",
+    title: "Aperçu & Téléchargement",
+    counter: "Étape 6 / 6",
+    desc: "Vérifiez le contenu généré, puis téléchargez votre fichier AGENTS.md.",
+    render: renderPreview,
+    validate: () => true
+  }
+];
+
+const card = document.getElementById("card");
+const progressEl = document.getElementById("progress");
+
+function renderProgress() {
+  progressEl.innerHTML = "";
+  steps.forEach((_, i) => {
+    const seg = document.createElement("div");
+    seg.className = "progress-step";
+    if (i < state.currentStep) seg.classList.add("done");
+    else if (i === state.currentStep) seg.classList.add("active");
+    progressEl.appendChild(seg);
+  });
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+}
+
+function inputField(label, key, placeholder = "", help = "") {
+  return `
+    <div class="field">
+      <label for="f-${key}">${label}</label>
+      ${help ? `<span class="help">${help}</span>` : ""}
+      <input type="text" id="f-${key}" placeholder="${escapeHtml(placeholder)}" value="${escapeHtml(state.data[key] || "")}" />
+    </div>
+  `;
+}
+
+function textareaField(label, key, placeholder = "", help = "") {
+  return `
+    <div class="field">
+      <label for="f-${key}">${label}</label>
+      ${help ? `<span class="help">${help}</span>` : ""}
+      <textarea id="f-${key}" placeholder="${escapeHtml(placeholder)}">${escapeHtml(state.data[key] || "")}</textarea>
+    </div>
+  `;
+}
+
+function selectField(label, key, options, help = "") {
+  const opts = options.map(o =>
+    `<option value="${escapeHtml(o)}" ${state.data[key] === o ? "selected" : ""}>${o || "—"}</option>`
+  ).join("");
+  return `
+    <div class="field">
+      <label for="f-${key}">${label}</label>
+      ${help ? `<span class="help">${help}</span>` : ""}
+      <select id="f-${key}">${opts}</select>
+    </div>
+  `;
+}
+
+function checkboxGrid(label, key, options, help = "") {
+  const items = options.map(o => {
+    const checked = state.data[key].includes(o);
+    return `
+      <label class="checkbox-item ${checked ? "checked" : ""}">
+        <input type="checkbox" data-cb-key="${key}" value="${escapeHtml(o)}" ${checked ? "checked" : ""} />
+        <span>${o}</span>
+      </label>
+    `;
+  }).join("");
+  return `
+    <div class="field">
+      <label>${label}</label>
+      ${help ? `<span class="help">${help}</span>` : ""}
+      <div class="checkbox-grid">${items}</div>
+    </div>
+  `;
+}
+
+function bindInputs() {
+  card.querySelectorAll("input[type='text'], input[type='url'], textarea, select").forEach(el => {
+    if (el.id && el.id.startsWith("f-")) {
+      const key = el.id.slice(2);
+      el.addEventListener("input", () => {
+        state.data[key] = el.value;
+      });
+    }
+  });
+  card.querySelectorAll("input[type='checkbox'][data-cb-key]").forEach(el => {
+    el.addEventListener("change", () => {
+      const key = el.dataset.cbKey;
+      const v = el.value;
+      const arr = state.data[key];
+      if (el.checked) {
+        if (!arr.includes(v)) arr.push(v);
+      } else {
+        const idx = arr.indexOf(v);
+        if (idx >= 0) arr.splice(idx, 1);
+      }
+      el.parentElement.classList.toggle("checked", el.checked);
+    });
+  });
+}
+
+function renderWelcome() {
+  return `
+    <div class="step-header">
+      <span class="step-counter">${steps[0].counter}</span>
+    </div>
+    <h2 class="step-title">${steps[0].title} 👋</h2>
+    <p class="step-desc">${steps[0].desc}</p>
+    <div class="welcome-features">
+      <div class="feature">
+        <div class="icon">🧭</div>
+        <h3>Wizard guidé</h3>
+        <p>6 étapes simples pour décrire votre projet.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">📝</div>
+        <h3>Aperçu en direct</h3>
+        <p>Visualisez le markdown final avant de l'exporter.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">⬇️</div>
+        <h3>Téléchargement</h3>
+        <p>Récupérez votre AGENTS.md prêt à commiter.</p>
+      </div>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">
+      💡 Toutes les informations restent dans votre navigateur — rien n'est envoyé sur un serveur.
+    </p>
+  `;
+}
+
+function renderProject() {
+  return `
+    <div class="step-header"><span class="step-counter">${steps[1].counter}</span></div>
+    <h2 class="step-title">${steps[1].title}</h2>
+    <p class="step-desc">${steps[1].desc}</p>
+    ${inputField("Nom du projet *", "projectName", "Ex : Mon super projet")}
+    ${textareaField("Description courte", "description", "En une ou deux phrases, à quoi sert le projet ?")}
+    ${selectField("Type de projet", "projectType", ["", "Application web", "Application mobile", "Application desktop", "Bibliothèque / SDK", "API / Backend", "CLI", "Monorepo", "Autre"])}
+    ${inputField("URL du dépôt (optionnel)", "repoUrl", "https://github.com/user/projet")}
+  `;
+}
+
+function renderStack() {
+  return `
+    <div class="step-header"><span class="step-counter">${steps[2].counter}</span></div>
+    <h2 class="step-title">${steps[2].title}</h2>
+    <p class="step-desc">${steps[2].desc}</p>
+    ${checkboxGrid("Langages", "languages", LANGUAGES)}
+    ${checkboxGrid("Frameworks / Runtimes", "frameworks", FRAMEWORKS)}
+    ${selectField("Gestionnaire de paquets", "packageManager", PACKAGE_MANAGERS)}
+  `;
+}
+
+function renderCommands() {
+  return `
+    <div class="step-header"><span class="step-counter">${steps[3].counter}</span></div>
+    <h2 class="step-title">${steps[3].title}</h2>
+    <p class="step-desc">${steps[3].desc}</p>
+    ${inputField("Installation des dépendances", "installCmd", "Ex : npm install")}
+    ${inputField("Lancer en développement", "devCmd", "Ex : npm run dev")}
+    ${inputField("Build de production", "buildCmd", "Ex : npm run build")}
+    ${inputField("Tests", "testCmd", "Ex : npm test")}
+    ${inputField("Linter", "lintCmd", "Ex : npm run lint")}
+    ${inputField("Formatage", "formatCmd", "Ex : npm run format")}
+  `;
+}
+
+function renderStyle() {
+  return `
+    <div class="step-header"><span class="step-counter">${steps[4].counter}</span></div>
+    <h2 class="step-title">${steps[4].title}</h2>
+    <p class="step-desc">${steps[4].desc}</p>
+    ${selectField("Indentation / formatage", "codeStyle", ["", "2 espaces", "4 espaces", "Tabulations", "Prettier", "ESLint + Prettier", "Black (Python)", "gofmt", "rustfmt", "Autre"])}
+    ${selectField("Convention de nommage", "namingConv", ["", "camelCase", "snake_case", "PascalCase", "kebab-case", "Mixte (selon contexte)"])}
+    ${textareaField("Style des commentaires", "commentStyle", "Ex : commentaires uniquement quand le pourquoi n'est pas évident, JSDoc sur les APIs publiques…")}
+    ${textareaField("Structure du projet", "folderStructure", "Ex :\nsrc/        — code source\ntests/      — tests unitaires\ndocs/       — documentation")}
+    ${textareaField("Conventions générales", "conventions", "Ex : Conventional Commits, branches feat/* fix/*, PR ≤ 300 lignes…")}
+  `;
+}
+
+function renderRules() {
+  return `
+    <div class="step-header"><span class="step-counter">${steps[5].counter}</span></div>
+    <h2 class="step-title">${steps[5].title}</h2>
+    <p class="step-desc">${steps[5].desc}</p>
+    ${textareaField("✅ À faire", "doRules", "Ex :\n- Lancer les tests avant de proposer un commit\n- Privilégier les fonctions pures\n- Respecter le style existant")}
+    ${textareaField("⛔ À éviter", "dontRules", "Ex :\n- Ne pas modifier les fichiers générés\n- Ne pas ajouter de dépendances sans validation\n- Ne pas utiliser any en TypeScript")}
+    ${textareaField("Notes supplémentaires", "extraNotes", "Toute information utile à l'agent : limitations connues, particularités…")}
+  `;
+}
+
+function renderPreview() {
+  const md = generateMarkdown();
+  const d = state.data;
+  const langs = d.languages.length ? d.languages.map(l => `<span class="pill">${escapeHtml(l)}</span>`).join("") : "<span class='value' style='color:var(--text-muted)'>—</span>";
+  const fws = d.frameworks.length ? d.frameworks.map(f => `<span class="pill">${escapeHtml(f)}</span>`).join("") : "<span class='value' style='color:var(--text-muted)'>—</span>";
+  return `
+    <div class="step-header"><span class="step-counter">${steps[6].counter}</span></div>
+    <h2 class="step-title">${steps[6].title}</h2>
+    <p class="step-desc">${steps[6].desc}</p>
+
+    <div class="summary-grid">
+      <div class="summary-item">
+        <div class="label">Projet</div>
+        <div class="value">${escapeHtml(d.projectName || "Sans nom")}</div>
+      </div>
+      <div class="summary-item">
+        <div class="label">Type</div>
+        <div class="value">${escapeHtml(d.projectType || "—")}</div>
+      </div>
+      <div class="summary-item">
+        <div class="label">Langages</div>
+        <div class="pill-row">${langs}</div>
+      </div>
+      <div class="summary-item">
+        <div class="label">Frameworks</div>
+        <div class="pill-row">${fws}</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Aperçu du fichier AGENTS.md</label>
+      <div class="preview" id="preview">${escapeHtml(md)}</div>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;">
+      <button class="btn-success" id="btn-download">⬇️ Télécharger AGENTS.md</button>
+      <button class="btn-secondary" id="btn-copy">📋 Copier le markdown</button>
+      <button class="btn-secondary" id="btn-reset">↺ Recommencer</button>
+    </div>
+    <p id="copy-feedback" style="color: var(--success); font-size: 0.85rem; margin-top: 12px; height: 16px;"></p>
+  `;
+}
+
+function joinList(text) {
+  if (!text) return "";
+  return text
+    .split(/\r?\n/)
+    .map(l => l.trim())
+    .filter(Boolean)
+    .map(l => l.startsWith("-") || l.startsWith("*") ? l : `- ${l}`)
+    .join("\n");
+}
+
+function generateMarkdown() {
+  const d = state.data;
+  const lines = [];
+  const name = d.projectName.trim() || "Projet";
+
+  lines.push(`# ${name}`);
+  lines.push("");
+  lines.push("> Fichier de configuration pour les agents IA (Claude Code, Cursor, Copilot, etc.)");
+  lines.push("");
+
+  // Vue d'ensemble
+  if (d.description || d.projectType || d.repoUrl) {
+    lines.push("## Vue d'ensemble");
+    lines.push("");
+    if (d.description) { lines.push(d.description.trim()); lines.push(""); }
+    if (d.projectType) lines.push(`- **Type** : ${d.projectType}`);
+    if (d.repoUrl) lines.push(`- **Dépôt** : ${d.repoUrl}`);
+    lines.push("");
+  }
+
+  // Stack technique
+  if (d.languages.length || d.frameworks.length || d.packageManager) {
+    lines.push("## Stack technique");
+    lines.push("");
+    if (d.languages.length) lines.push(`- **Langages** : ${d.languages.join(", ")}`);
+    if (d.frameworks.length) lines.push(`- **Frameworks** : ${d.frameworks.join(", ")}`);
+    if (d.packageManager) lines.push(`- **Gestionnaire de paquets** : ${d.packageManager}`);
+    lines.push("");
+  }
+
+  // Commandes
+  const cmds = [
+    ["Installation", d.installCmd],
+    ["Développement", d.devCmd],
+    ["Build", d.buildCmd],
+    ["Tests", d.testCmd],
+    ["Lint", d.lintCmd],
+    ["Format", d.formatCmd]
+  ].filter(([, v]) => v && v.trim());
+
+  if (cmds.length) {
+    lines.push("## Commandes");
+    lines.push("");
+    for (const [label, cmd] of cmds) {
+      lines.push(`### ${label}`);
+      lines.push("");
+      lines.push("```bash");
+      lines.push(cmd.trim());
+      lines.push("```");
+      lines.push("");
+    }
+  }
+
+  // Style de code
+  if (d.codeStyle || d.namingConv || d.commentStyle) {
+    lines.push("## Style de code");
+    lines.push("");
+    if (d.codeStyle) lines.push(`- **Formatage** : ${d.codeStyle}`);
+    if (d.namingConv) lines.push(`- **Nommage** : ${d.namingConv}`);
+    if (d.commentStyle) {
+      lines.push("");
+      lines.push("**Commentaires :**");
+      lines.push("");
+      lines.push(d.commentStyle.trim());
+    }
+    lines.push("");
+  }
+
+  // Structure
+  if (d.folderStructure) {
+    lines.push("## Structure du projet");
+    lines.push("");
+    lines.push("```");
+    lines.push(d.folderStructure.trim());
+    lines.push("```");
+    lines.push("");
+  }
+
+  // Conventions
+  if (d.conventions) {
+    lines.push("## Conventions");
+    lines.push("");
+    const conv = joinList(d.conventions);
+    lines.push(conv);
+    lines.push("");
+  }
+
+  // Règles
+  if (d.doRules || d.dontRules) {
+    lines.push("## Règles pour l'agent");
+    lines.push("");
+    if (d.doRules) {
+      lines.push("### À faire");
+      lines.push("");
+      lines.push(joinList(d.doRules));
+      lines.push("");
+    }
+    if (d.dontRules) {
+      lines.push("### À éviter");
+      lines.push("");
+      lines.push(joinList(d.dontRules));
+      lines.push("");
+    }
+  }
+
+  // Notes
+  if (d.extraNotes) {
+    lines.push("## Notes");
+    lines.push("");
+    lines.push(d.extraNotes.trim());
+    lines.push("");
+  }
+
+  lines.push("---");
+  lines.push("");
+  lines.push("_Fichier généré avec le générateur AGENTS.md._");
+  lines.push("");
+
+  return lines.join("\n");
+}
+
+function downloadMarkdown() {
+  const md = generateMarkdown();
+  const blob = new Blob([md], { type: "text/markdown;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "AGENTS.md";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+async function copyMarkdown() {
+  const md = generateMarkdown();
+  const fb = document.getElementById("copy-feedback");
+  try {
+    await navigator.clipboard.writeText(md);
+    if (fb) fb.textContent = "✓ Copié dans le presse-papiers";
+  } catch {
+    const ta = document.createElement("textarea");
+    ta.value = md;
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); if (fb) fb.textContent = "✓ Copié"; }
+    catch { if (fb) fb.textContent = "Impossible de copier"; }
+    document.body.removeChild(ta);
+  }
+  setTimeout(() => { if (fb) fb.textContent = ""; }, 2200);
+}
+
+function resetAll() {
+  if (!confirm("Recommencer effacera toutes les informations saisies. Continuer ?")) return;
+  for (const key of Object.keys(state.data)) {
+    state.data[key] = Array.isArray(state.data[key]) ? [] : "";
+  }
+  state.currentStep = 0;
+  render();
+}
+
+function renderActions() {
+  const isFirst = state.currentStep === 0;
+  const isLast = state.currentStep === steps.length - 1;
+  const prevLabel = isFirst ? "" : "← Précédent";
+  const nextLabel = state.currentStep === 0 ? "Commencer →" : (isLast ? "" : "Suivant →");
+
+  const html = `
+    <div class="actions">
+      ${isFirst ? "<span></span>" : `<button class="btn-secondary" id="btn-prev">${prevLabel}</button>`}
+      ${isLast ? "<span></span>" : `<button class="btn-primary" id="btn-next">${nextLabel}</button>`}
+    </div>
+  `;
+  card.insertAdjacentHTML("beforeend", html);
+
+  const prev = document.getElementById("btn-prev");
+  const next = document.getElementById("btn-next");
+  if (prev) prev.addEventListener("click", goPrev);
+  if (next) next.addEventListener("click", goNext);
+}
+
+function goNext() {
+  const step = steps[state.currentStep];
+  if (!step.validate()) {
+    alert("Veuillez remplir les champs obligatoires (*).");
+    return;
+  }
+  if (state.currentStep < steps.length - 1) {
+    state.currentStep++;
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
+function goPrev() {
+  if (state.currentStep > 0) {
+    state.currentStep--;
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
+function render() {
+  renderProgress();
+  const step = steps[state.currentStep];
+  card.innerHTML = step.render();
+  bindInputs();
+
+  if (step.id === "preview") {
+    document.getElementById("btn-download").addEventListener("click", downloadMarkdown);
+    document.getElementById("btn-copy").addEventListener("click", copyMarkdown);
+    document.getElementById("btn-reset").addEventListener("click", resetAll);
+  }
+
+  renderActions();
+}
+
+render();
+</script>
+</body>
+</html>
